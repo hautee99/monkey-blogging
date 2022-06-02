@@ -6,15 +6,18 @@ import { Label } from "components/label";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { categoryStatus } from "utils/constants";
 
 const CategoryAddNew = () => {
   const {
     control,
     setValue,
+    watch,
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     mode: "onChange",
   });
+  const watchStatus = watch("status");
   return (
     <div>
       <DashboardHeading
@@ -44,10 +47,15 @@ const CategoryAddNew = () => {
           <Field>
             <Label>Status</Label>
             <div className="flex flex-wrap gap-x-5">
-              <Radio name="status" control={control} checked={true}>
+              <Radio name="status" control={control} c>
                 Approved
               </Radio>
-              <Radio name="status" control={control}>
+              <Radio
+                name="status"
+                control={control}
+                checked={Number(watchStatus) === categoryStatus.APPROVED}
+                value={categoryStatus.APPROVED}
+              >
                 Unapproved
               </Radio>
             </div>

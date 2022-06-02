@@ -17,6 +17,8 @@ import { Button } from "components/button";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -32,9 +34,9 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      categoryId: "",
       hot: false,
       image: "",
+      category: {},
     },
   });
   const watchStatus = watch("status");
@@ -49,6 +51,10 @@ const PostAddNew = () => {
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const [categoryDetails, setCategoryDetails] = useState({});
+  useEffect(() => {}, []);
+
   const addPostHandler = async (values) => {
     setLoading(true);
     try {
@@ -67,9 +73,9 @@ const PostAddNew = () => {
         title: "",
         slug: "",
         status: 2,
-        categoryId: "",
         hot: false,
         image: "",
+        category: {},
       });
       handleResetUpload();
       setSelectCategory({});
@@ -101,8 +107,13 @@ const PostAddNew = () => {
     document.title = "Monkey Blogging - Add new post";
   }, []);
 
-  const handleClickOption = (item) => {
-    setValue("categoryId", item.id);
+  const handleClickOption = async (item) => {
+    const colRef = doc(db, "categories", item.id);
+    const docData = await getDoc(colRef);
+    setCategoryDetails({
+      id: doc.id,
+      ...docData.data(),
+    });
     setSelectCategory(item);
   };
 
