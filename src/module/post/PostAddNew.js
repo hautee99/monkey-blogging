@@ -25,6 +25,7 @@ import {
   where,
 } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
+import { async } from "@firebase/util";
 
 const PostAddNew = () => {
   const { userInfo } = useAuth();
@@ -37,6 +38,7 @@ const PostAddNew = () => {
       hot: false,
       image: "",
       category: {},
+      user: {},
     },
   });
   const watchStatus = watch("status");
@@ -51,9 +53,24 @@ const PostAddNew = () => {
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [loading, setLoading] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
-  const [categoryDetails, setCategoryDetails] = useState({});
   useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userInfo.email) return;
+      const q = query(
+        collection(db, "users"),
+        where("email", "==", userInfo.email)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setValue("user", {
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+    };
+    fetchUserData();
+  }, [userInfo.email]);
 
   const addPostHandler = async (values) => {
     setLoading(true);
@@ -61,7 +78,10 @@ const PostAddNew = () => {
       const cloneValues = { ...values };
       cloneValues.slug = slugify(values.slug || values.title, { lower: true });
       cloneValues.status = Number(values.status);
+      // console.log("🚀 ~ file: PostAddNew.js ~ line 64 ~ addPostHandler ~ cloneValues", cloneValues)
+
       const colRef = collection(db, "posts");
+      console.log(cloneValues);
       await addDoc(colRef, {
         ...cloneValues,
         image,
@@ -73,9 +93,10 @@ const PostAddNew = () => {
         title: "",
         slug: "",
         status: 2,
+        categoryId: {},
         hot: false,
         image: "",
-        category: {},
+        user: {},
       });
       handleResetUpload();
       setSelectCategory({});
@@ -110,8 +131,8 @@ const PostAddNew = () => {
   const handleClickOption = async (item) => {
     const colRef = doc(db, "categories", item.id);
     const docData = await getDoc(colRef);
-    setCategoryDetails({
-      id: doc.id,
+    setValue("category", {
+      id: docData.id,
       ...docData.data(),
     });
     setSelectCategory(item);

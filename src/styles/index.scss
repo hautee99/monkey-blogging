@@ -60,8 +60,10 @@ a {
     padding-bottom: 60px;
   }
 }
-.entry-content {
+.entry-content,
+.entry-content .ql-snow .ql-editor {
   font-size: 16px;
+  font-family: "Epilogue", sans-serif;
   h2,
   h3,
   h4 {

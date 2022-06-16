@@ -77,6 +77,9 @@ const CategoryManage = () => {
           )
         : query(colRef, limit(1));
       const documentSnapshots = await getDocs(newRef);
+      onSnapshot(colRef, (snapshot) => {
+        setTotal(snapshot.size);
+      });
 
       // Get the last visible document
       const lastVisible =
