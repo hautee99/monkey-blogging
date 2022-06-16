@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import { Input } from "components/input";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { postStatus } from "utils/constants";
@@ -102,39 +102,29 @@ const PostUpdate = () => {
       content,
     });
     toast.success("Update post successfully");
-    console.log(values);
-    // if (!isValid) return;
-    // try {
-    //   const colRef = doc(db, "users", userId);
-    //   await updateDoc(colRef, {
-    //     ...values,
-    //     avatar: image,
-    //   });
-    //   toast.success("Update user information successfully!");
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error("Update user failed!");
-    // }
   };
-  const modules = {
-    toolbar: [
-      ["bold", "italic", "underline", "strike"],
-      ["blockquote"],
-      [{ header: 1 }, { header: 2 }], // custom button values
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["link", "image"],
-    ],
-    ImageUploader: {
-      upload: (file) => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve("https://source.unsplash.com/FV3GConVSss/900x500");
-          }, 3500);
-        });
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote"],
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["link", "image"],
+      ],
+      ImageUploader: {
+        upload: (file) => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve("https://source.unsplash.com/FV3GConVSss/900x500");
+            }, 3500);
+          });
+        },
       },
-    },
-  };
+    }),
+    []
+  );
   if (!postId) return null;
   return (
     <div>
