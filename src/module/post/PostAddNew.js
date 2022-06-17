@@ -78,14 +78,14 @@ const PostAddNew = () => {
       const cloneValues = { ...values };
       cloneValues.slug = slugify(values.slug || values.title, { lower: true });
       cloneValues.status = Number(values.status);
-      // console.log("🚀 ~ file: PostAddNew.js ~ line 64 ~ addPostHandler ~ cloneValues", cloneValues)
 
       const colRef = collection(db, "posts");
       console.log(cloneValues);
       await addDoc(colRef, {
         ...cloneValues,
+        categoryId: cloneValues.category.id,
+        userId: cloneValues.user.id,
         image,
-        userId: userInfo.uid,
         createdAt: serverTimestamp(),
       });
       toast.success("Create new post successfully!");

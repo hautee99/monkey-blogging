@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useController } from "react-hook-form";
-import PropTypes from "prop-types";
 
-const InputStyles = styled.div`
+const TextareaStyles = styled.div`
   position: relative;
   width: 100%;
   input {
@@ -17,10 +16,10 @@ const InputStyles = styled.div`
     color: ${(props) => props.theme.black};
     font-size: 14px;
   }
-  input::-webkit-input-placeholder {
+  textarea::-webkit-input-placeholder {
     color: #b2b3bd;
   }
-  input::-moz-input-placeholder {
+  textarea::-moz-input-placeholder {
     color: #b2b3bd;
   }
   .input-icon {
@@ -34,29 +33,28 @@ const InputStyles = styled.div`
 /**
  *
  * @param {*} placeholder(optional) - Placeholder of input
- * @param {*} name(optional) - name of input
+ * @param {*} name(optional) - name of textarea
  * @param {*} control - control from react hook form
  * @returns Input
  */
-const Input = ({ name = "", type = "text", children, control, ...props }) => {
+const Textarea = ({
+  name = "",
+  type = "text",
+  children,
+  control,
+  ...props
+}) => {
   const { field } = useController({
     control,
     name,
     defaultValue: "",
   });
   return (
-    <InputStyles hasIcon={children ? true : false}>
-      <input id={name} type={type} {...field} {...props} />
+    <TextareaStyles hasIcon={children ? true : false}>
+      <textarea id={name} type={type} {...field} {...props} />
       {children ? <div className="input-icon">{children}</div> : null}
-    </InputStyles>
+    </TextareaStyles>
   );
 };
 
-Input.protoType = {
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  children: PropTypes.any,
-  control: PropTypes.any.isRequired,
-};
-
-export default Input;
+export default Textarea;

@@ -96,6 +96,19 @@ a {
     font-size: 14px;
     color: #6b6b6b;
   }
+  ul,
+  ol {
+    margin-bottom: 20px;
+    padding-left: 40px;
+    margin-left: 0;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+  img {
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
   @media screen and (max-width: 1023.98px) {
     font-size: 14px;
     h2 {
@@ -128,4 +141,14 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   box-shadow: 0 0 0 30px white inset;
+}
+
+.quill {
+  position: relative;
+  .ql-toolbar {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+  }
 }
